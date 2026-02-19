@@ -25,14 +25,19 @@ export default function HeroFilter({ filters, onChange, onSearch }) {
             }
           >
             <option value="All Sources">All Sources</option>
-            <option value="NewsAPI">News API</option>
-            <option value="GNews">G News</option>
-            <option value="NewsData">News Data</option>
-            <option value="TheGuardian">The Guardian</option>
+            <option value="newsapi">News API</option>
+            <option value="gnews">G News</option>
+            <option value="newsdata">News Data</option>
+            <option value="guardian">The Guardian</option>
           </select>
          
-
-          <button onClick={onSearch}>Search</button>
+          <input
+            type="date"
+            value={filters.date}
+            onChange={(e) =>
+              onChange({ ...filters, date: e.target.value })
+            }
+          />
         </div>
 
         <div className="category-pills">

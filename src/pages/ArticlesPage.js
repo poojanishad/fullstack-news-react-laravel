@@ -9,7 +9,8 @@ export default function ArticlesPage() {
   const [filters, setFilters] = useState({
     search: '',
     source: '',
-    category: ''
+    category: '',
+    date: ''
   });
 
   const fetchArticles = () => {
