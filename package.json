@@ -1,7 +1,6 @@
 {
   "name": "react-news",
-  "homepage": "https://poojanishad.github.io/react-laravel-news-app",   
-    "homepage": "https://myusername.github.io",
+  "homepage": "https://myusername.github.io",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,9 +9,11 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.13.5",
+    "bootstrap": "^5.3.8",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-scripts": "5.0.1",
+    "uuid": "^13.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

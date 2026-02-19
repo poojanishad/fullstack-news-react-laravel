@@ -1,16 +1,16 @@
 export default function NewsCard({ article }) {
 
-  const formatDate = (dateString) => {
+const formatDate = (dateString) => {
   if (!dateString) return '';
 
-  const date = new Date(dateString);
+  // Always take first 10 characters (YYYY-MM-DD)
+  const datePart = dateString.substring(0, 10);
 
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
+  const [year, month, day] = datePart.split('-');
 
   return `${day}-${month}-${year}`;
 };
+
 
 if (!article || article.length === 0) {
   return (
@@ -42,7 +42,7 @@ if (article) {
         <div className="meta">
           <span>{article.source}</span>
           <span className="date">
-            Date: {formatDate(article.publishedAt || article.created_at)}
+            Date: {formatDate(article.published_at)}
           </span>
           <a href={article.url} target="_blank" rel="noreferrer">
             Read →
