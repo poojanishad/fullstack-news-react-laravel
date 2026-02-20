@@ -140,7 +140,7 @@ body {
   padding: 20px 26px;
   border-radius: 18px;
 
-  max-width: 1050px;
+  max-width: 1071px;
   margin: 0 auto;
 }
 
@@ -161,7 +161,6 @@ body {
   box-shadow: 0 0 0 2px rgba(255,107,53,0.15);
 }
 
-/* SAVE BUTTON */
 .btn-save {
   background: #ff6b35;
   color: #fff;
@@ -179,7 +178,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* CLEAR BUTTON */
 .btn-clear {
   background: #555;
   color: #fff;
@@ -272,7 +270,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* CLEAR BUTTON */
 .btn-clear {
   background: #555;
   color: #fff;
@@ -333,7 +330,7 @@ body {
 }
 
 .filter-box {
-  padding-right: 28px;  /* Right breathing space */
+  padding-right: 28px;  
 }
 
 .btn-clear {

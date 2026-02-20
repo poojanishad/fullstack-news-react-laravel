@@ -3,7 +3,6 @@ export default function NewsCard({ article }) {
 const formatDate = (dateString) => {
   if (!dateString) return '';
 
-  // Always take first 10 characters (YYYY-MM-DD)
   const datePart = dateString.substring(0, 10);
 
   const [year, month, day] = datePart.split('-');

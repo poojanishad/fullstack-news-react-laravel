@@ -7,9 +7,10 @@ export default function HeroFilter({
   onSavePreference,
   onClearPreference,
 }) {
-
   const toggleItem = (field, value) => {
-    const current = filters[field] || [];
+    if (!value) return;
+
+    const current = filters[field];
 
     if (current.includes(value)) {
       onChange({
@@ -38,8 +39,6 @@ export default function HeroFilter({
         <p>Search and filter by source, author, category & date</p>
 
         <div className="filter-box">
-
-          {/* Search */}
           <input
             type="text"
             placeholder="Search title..."
@@ -49,35 +48,24 @@ export default function HeroFilter({
             }
           />
 
-          {/* Source Dropdown */}
-          <select
-            onChange={(e) =>
-              toggleItem("sources", e.target.value)
-            }
-          >
+          <select onChange={(e) => toggleItem("sources", e.target.value)}>
             <option value="">All Sources</option>
-            {meta.sources.map((src) => (
+            {meta.sources?.map((src) => (
               <option key={src} value={src}>
                 {src}
               </option>
             ))}
           </select>
 
-          {/* Author Dropdown */}
-          <select
-            onChange={(e) =>
-              toggleItem("authors", e.target.value)
-            }
-          >
+          <select onChange={(e) => toggleItem("authors", e.target.value)}>
             <option value="">All Authors</option>
-            {meta.authors.map((author) => (
+            {meta.authors?.map((author) => (
               <option key={author} value={author}>
                 {author}
               </option>
             ))}
           </select>
 
-          {/* Date */}
           <input
             type="date"
             value={filters.date}
@@ -95,7 +83,6 @@ export default function HeroFilter({
           </button>
         </div>
 
-        {/* Selected Chips */}
         <div className="selected-chips">
           {filters.sources.map((src) => (
             <span key={src} className="chip">
@@ -112,9 +99,8 @@ export default function HeroFilter({
           ))}
         </div>
 
-        {/* Category Pills */}
         <div className="category-pills">
-          {meta.categories.map((cat) => (
+          {meta.categories?.map((cat) => (
             <button
               key={cat}
               className={
@@ -126,7 +112,6 @@ export default function HeroFilter({
             </button>
           ))}
         </div>
-
       </div>
     </section>
   );
