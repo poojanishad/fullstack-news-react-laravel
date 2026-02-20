@@ -6,7 +6,7 @@ export default function NewsGrid({ articles }) {
       <div className="empty-state">
         <h3>No records found</h3>
         <p>
-          We couldn’t find any articles matching your filters.
+          We couldn't find any articles matching your filters.
           <br />
           Try adjusting keywords, date, or source.
         </p>
