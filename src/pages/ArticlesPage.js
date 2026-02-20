@@ -20,6 +20,8 @@ export default function ArticlesPage() {
     categories: [],
   });
 
+  const [initialized, setInitialized] = useState(false);
+
   const {
     articles,
     meta: pagination,
@@ -36,8 +38,32 @@ export default function ArticlesPage() {
   }, []);
 
   useEffect(() => {
+    const loadPreference = async () => {
+      try {
+        const res = await api.get("/preferences");
+
+        if (res.data.data) {
+          setFilters(prev => ({
+            ...prev,
+            sources: res.data.data.sources || [],
+            categories: res.data.data.categories || [],
+            authors: res.data.data.authors || [],
+          }));
+        }
+      } catch (e) {
+        console.log("No saved preference");
+      } finally {
+        setInitialized(true);
+      }
+    };
+
+    loadPreference();
+  }, []);
+
+  useEffect(() => {
+    if (!initialized) return;
     fetchArticles(1);
-  }, [filters]);
+  }, [filters, initialized]);
 
   const handleSavePreference = async () => {
     await api.post("/preferences", {
