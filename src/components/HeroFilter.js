@@ -48,31 +48,39 @@ export default function HeroFilter({
             }
           />
 
-          <select onChange={(e) => toggleItem("sources", e.target.value)}>
+          <select
+            value={filters.sources[0] || ""}
+            onChange={(e) =>
+              onChange({
+                ...filters,
+                sources: e.target.value ? [e.target.value] : [],
+              })
+            }
+          >
             <option value="">All Sources</option>
-            {meta.sources?.map((src) => (
+            {meta.sources.map((src) => (
               <option key={src} value={src}>
                 {src}
               </option>
             ))}
           </select>
 
-          <select onChange={(e) => toggleItem("authors", e.target.value)}>
+          <select
+            value={filters.authors[0] || ""}
+            onChange={(e) =>
+              onChange({
+                ...filters,
+                authors: e.target.value ? [e.target.value] : [],
+              })
+            }
+          >
             <option value="">All Authors</option>
-            {meta.authors?.map((author) => (
+            {meta.authors.map((author) => (
               <option key={author} value={author}>
                 {author}
               </option>
             ))}
           </select>
-
-          <input
-            type="date"
-            value={filters.date}
-            onChange={(e) =>
-              onChange({ ...filters, date: e.target.value })
-            }
-          />
 
           <button className="btn-save" onClick={onSavePreference}>
             Save Preference
