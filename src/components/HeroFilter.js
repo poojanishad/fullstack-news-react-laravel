@@ -65,7 +65,7 @@ export default function HeroFilter({
             ))}
           </select>
 
-          <select
+          <select class="selectCompact"
             value={filters.authors[0] || ""}
             onChange={(e) =>
               onChange({
@@ -81,6 +81,14 @@ export default function HeroFilter({
               </option>
             ))}
           </select>
+
+          <input
+            type="date"
+            value={filters.date}
+            onChange={(e) =>
+              onChange({ ...filters, date: e.target.value })
+            }
+          />
 
           <button className="btn-save" onClick={onSavePreference}>
             Save Preference

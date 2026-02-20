@@ -29,7 +29,6 @@ export default function ArticlesPage() {
     fetchArticles,
   } = useArticles(filters);
 
-  /* 1️⃣ Load Dropdown Meta */
   useEffect(() => {
     const loadMeta = async () => {
       const res = await api.get("/articles/meta");
@@ -38,7 +37,6 @@ export default function ArticlesPage() {
     loadMeta();
   }, []);
 
-  /* 2️⃣ Load Saved Preference FIRST */
   useEffect(() => {
     const loadPreference = async () => {
       try {
@@ -62,13 +60,11 @@ export default function ArticlesPage() {
     loadPreference();
   }, []);
 
-  /* 3️⃣ Fetch Articles ONLY after preference loaded */
   useEffect(() => {
     if (!initialized) return;
     fetchArticles(1);
   }, [filters, initialized]);
 
-  /* Save Preference */
   const handleSavePreference = async () => {
     await api.post("/preferences", {
       sources: filters.sources,
@@ -78,7 +74,6 @@ export default function ArticlesPage() {
     alert("Preference Saved");
   };
 
-  /* Clear Preference */
   const handleClearPreference = async () => {
     await api.delete("/preferences");
 
