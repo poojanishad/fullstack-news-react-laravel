@@ -340,3 +340,30 @@ body {
   margin-left: 8px;
 }
 
+.selected-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.chip {
+  background: #ff6b35;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+

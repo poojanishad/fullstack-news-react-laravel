@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api/axios";
 import HeroFilter from "../components/HeroFilter";
 import NewsGrid from "../components/NewsGrid";
@@ -9,42 +9,36 @@ export default function ArticlesPage() {
 
   const [filters, setFilters] = useState({
     search: "",
-    source: "",
-    category: "",
+    sources: [],
+    authors: [],
+    categories: [],
     date: "",
   });
 
-  // 🔹 Dropdown Meta (Sources, Authors, Categories)
-  const [filterMeta, setFilterMeta] = useState({
+  const [meta, setMeta] = useState({
     sources: [],
     authors: [],
-    categories: []
+    categories: [],
   });
 
-  // 🔹 Articles Hook
-  const {
-    articles,
-    meta: pagination,
-    loading,
-    fetchArticles
-  } = useArticles(filters);
+  const { articles, meta: pagination, loading, fetchArticles } =
+    useArticles(filters);
 
-  // -------------------------
-  // Load Preferences
-  // -------------------------
+  /* Load Saved Preferences */
   useEffect(() => {
     const loadPreference = async () => {
       try {
         const res = await api.get("/preferences");
 
-        if (res.data?.data) {
-          setFilters(prev => ({
+        if (res.data.data) {
+          setFilters((prev) => ({
             ...prev,
-            source: res.data.data.sources?.[0] || "",
-            category: res.data.data.categories?.[0] || "",
+            sources: res.data.data.sources || [],
+            authors: res.data.data.authors || [],
+            categories: res.data.data.categories || [],
           }));
         }
-      } catch (error) {
+      } catch (err) {
         console.log("No saved preference");
       }
     };
@@ -52,116 +46,58 @@ export default function ArticlesPage() {
     loadPreference();
   }, []);
 
-  // -------------------------
-  // Load Dropdown Meta
-  // -------------------------
+  /* Load Meta */
   useEffect(() => {
     const loadMeta = async () => {
-      try {
-        const res = await api.get("/articles/meta");
-        setFilterMeta(res.data);
-      } catch (error) {
-        console.error("Meta load failed");
-      }
+      const res = await api.get("/articles/meta");
+      setMeta(res.data);
     };
-
     loadMeta();
   }, []);
 
-  // -------------------------
-  // Fetch Articles
-  // -------------------------
+  /* Fetch Articles */
   useEffect(() => {
     fetchArticles(1);
   }, [filters]);
 
-  // -------------------------
-  // Save Preference
-  // -------------------------
+  /* Save Preference */
   const handleSavePreference = async () => {
-    try {
-      await api.post("/preferences", {
-        sources: filters.source ? [filters.source] : [],
-        categories: filters.category ? [filters.category] : [],
-        authors: [],
-      });
+    await api.post("/preferences", {
+      sources: filters.sources,
+      categories: filters.categories,
+      authors: filters.authors,
+    });
 
-      alert("Preference Saved");
-    } catch (error) {
-      console.error(error);
-    }
+    alert("Preference Saved");
   };
 
-  // -------------------------
-  // Clear Preference
-  // -------------------------
+  /* Clear Preference */
   const handleClearPreference = async () => {
-    try {
-      await api.delete("/preferences");
+    await api.delete("/preferences");
 
-      setFilters({
-        search: "",
-        source: "",
-        category: "",
-        date: "",
-      });
+    setFilters({
+      search: "",
+      sources: [],
+      authors: [],
+      categories: [],
+      date: "",
+    });
 
-      alert("Preference Cleared");
-    } catch (error) {
-      console.error(error);
-    }
+    alert("Preference Cleared");
   };
 
   return (
     <>
       <HeroFilter
         filters={filters}
-        meta={filterMeta} // 🔹 Pass dropdown meta
+        meta={meta}
         onChange={setFilters}
-        onSearch={() => fetchArticles(1)}
         onSavePreference={handleSavePreference}
         onClearPreference={handleClearPreference}
       />
 
-      <div className="container mt-4">
-
-        {loading ? (
-          <p className="text-center">Loading...</p>
-        ) : (
-          <NewsGrid articles={articles} />
-        )}
-
-        {/* Pagination */}
-        {pagination && (
-          <div className="pagination-container">
-
-            <button
-              disabled={pagination.current_page === 1}
-              onClick={() =>
-                fetchArticles(pagination.current_page - 1)
-              }
-            >
-              Previous
-            </button>
-
-            <span>
-              Page {pagination.current_page} of {pagination.last_page}
-            </span>
-
-            <button
-              disabled={
-                pagination.current_page === pagination.last_page
-              }
-              onClick={() =>
-                fetchArticles(pagination.current_page + 1)
-              }
-            >
-              Next
-            </button>
-
-          </div>
-        )}
-
+      <div className="app">
+        <NewsGrid articles={articles} loading={loading} />
       </div>
     </>
   );

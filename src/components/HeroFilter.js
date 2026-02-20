@@ -1,18 +1,41 @@
+import React from "react";
+
 export default function HeroFilter({
   filters,
   meta,
   onChange,
-  onSearch,
   onSavePreference,
-  onClearPreference
+  onClearPreference,
 }) {
+
+  const toggleItem = (field, value) => {
+    const current = filters[field] || [];
+
+    if (current.includes(value)) {
+      onChange({
+        ...filters,
+        [field]: current.filter((v) => v !== value),
+      });
+    } else {
+      onChange({
+        ...filters,
+        [field]: [...current, value],
+      });
+    }
+  };
+
+  const removeItem = (field, value) => {
+    onChange({
+      ...filters,
+      [field]: filters[field].filter((v) => v !== value),
+    });
+  };
 
   return (
     <section className="hero">
       <div className="hero-overlay">
-
         <h1>Find the Perfect News for You</h1>
-        <p>Search articles by date, source, author and category</p>
+        <p>Search and filter by source, author, category & date</p>
 
         <div className="filter-box">
 
@@ -28,13 +51,12 @@ export default function HeroFilter({
 
           {/* Source Dropdown */}
           <select
-            value={filters.source}
             onChange={(e) =>
-              onChange({ ...filters, source: e.target.value })
+              toggleItem("sources", e.target.value)
             }
           >
             <option value="">All Sources</option>
-            {meta?.sources?.map((src) => (
+            {meta.sources.map((src) => (
               <option key={src} value={src}>
                 {src}
               </option>
@@ -43,13 +65,12 @@ export default function HeroFilter({
 
           {/* Author Dropdown */}
           <select
-            value={filters.author || ""}
             onChange={(e) =>
-              onChange({ ...filters, author: e.target.value })
+              toggleItem("authors", e.target.value)
             }
           >
             <option value="">All Authors</option>
-            {meta?.authors?.map((author) => (
+            {meta.authors.map((author) => (
               <option key={author} value={author}>
                 {author}
               </option>
@@ -66,28 +87,40 @@ export default function HeroFilter({
           />
 
           <button className="btn-save" onClick={onSavePreference}>
-  Save Preference
-</button>
+            Save Preference
+          </button>
 
-<button className="btn-clear" onClick={onClearPreference}>
-  Clear
-</button>
+          <button className="btn-clear" onClick={onClearPreference}>
+            Clear
+          </button>
+        </div>
 
+        {/* Selected Chips */}
+        <div className="selected-chips">
+          {filters.sources.map((src) => (
+            <span key={src} className="chip">
+              {src}
+              <button onClick={() => removeItem("sources", src)}>×</button>
+            </span>
+          ))}
+
+          {filters.authors.map((author) => (
+            <span key={author} className="chip">
+              {author}
+              <button onClick={() => removeItem("authors", author)}>×</button>
+            </span>
+          ))}
         </div>
 
         {/* Category Pills */}
         <div className="category-pills">
-          {meta?.categories?.map((cat) => (
+          {meta.categories.map((cat) => (
             <button
               key={cat}
-              className={filters.category === cat ? "active" : ""}
-              onClick={() =>
-                onChange({
-                  ...filters,
-                  category:
-                    filters.category === cat ? "" : cat
-                })
+              className={
+                filters.categories.includes(cat) ? "active" : ""
               }
+              onClick={() => toggleItem("categories", cat)}
             >
               {cat}
             </button>
