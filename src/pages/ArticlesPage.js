@@ -20,6 +20,8 @@ export default function ArticlesPage() {
     categories: [],
   });
 
+  const [initialized, setInitialized] = useState(false);
+
   const {
     articles,
     meta: pagination,
@@ -27,6 +29,7 @@ export default function ArticlesPage() {
     fetchArticles,
   } = useArticles(filters);
 
+  /* 1️⃣ Load Dropdown Meta */
   useEffect(() => {
     const loadMeta = async () => {
       const res = await api.get("/articles/meta");
@@ -35,10 +38,37 @@ export default function ArticlesPage() {
     loadMeta();
   }, []);
 
+  /* 2️⃣ Load Saved Preference FIRST */
   useEffect(() => {
-    fetchArticles(1);
-  }, [filters]);
+    const loadPreference = async () => {
+      try {
+        const res = await api.get("/preferences");
 
+        if (res.data.data) {
+          setFilters(prev => ({
+            ...prev,
+            sources: res.data.data.sources || [],
+            categories: res.data.data.categories || [],
+            authors: res.data.data.authors || [],
+          }));
+        }
+      } catch (e) {
+        console.log("No saved preference");
+      } finally {
+        setInitialized(true);
+      }
+    };
+
+    loadPreference();
+  }, []);
+
+  /* 3️⃣ Fetch Articles ONLY after preference loaded */
+  useEffect(() => {
+    if (!initialized) return;
+    fetchArticles(1);
+  }, [filters, initialized]);
+
+  /* Save Preference */
   const handleSavePreference = async () => {
     await api.post("/preferences", {
       sources: filters.sources,
@@ -48,6 +78,7 @@ export default function ArticlesPage() {
     alert("Preference Saved");
   };
 
+  /* Clear Preference */
   const handleClearPreference = async () => {
     await api.delete("/preferences");
 

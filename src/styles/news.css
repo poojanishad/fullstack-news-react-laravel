@@ -108,7 +108,9 @@ body {
   background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa');
   background-size: cover;
   background-position: center;
-  height: 360px;
+  min-height: 360px;
+  height: auto;
+  padding-bottom: 40px;
   position: relative;
   border-radius: 0 0 24px 24px;
 }
